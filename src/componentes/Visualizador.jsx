@@ -190,7 +190,7 @@ const Page = styled.div`
 `;
 
 const Text = styled.div`
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
     margin-top: 10px;
     color: #000000;

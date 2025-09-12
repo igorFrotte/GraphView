@@ -29,7 +29,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
-	background: rgb(84, 90, 95);
+	background: rgb(149, 170, 187);
 	min-height: 100vh;
 }
 ol, ul {
