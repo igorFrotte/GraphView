@@ -32,6 +32,9 @@ export default function Visualizador() {
         }
 
         setErrorMsg("");
+        setOrigem("");
+        setDestino("");
+        setCusto("");
         insertEdge(o, d, c);
     }
 
@@ -47,7 +50,7 @@ export default function Visualizador() {
           const obj = {};
           setErrorMsg("");
           for (let i = 0; i <= num; i++) {
-              obj[i] = {dest:1, cost:2, next:{dest:3, cost:4, next:null}}; //null
+              obj[i] = null;
           }
           setGraph(obj);
           setShowGraph(true);
@@ -80,7 +83,7 @@ export default function Visualizador() {
 
     return (
       <Page>
-        {errorMsg && <p>{errorMsg}</p>}
+        {errorMsg && <MsgE>{errorMsg}</MsgE>}
 
         <form onSubmit={handleForm}>
             <input
@@ -139,7 +142,7 @@ export default function Visualizador() {
                 </Graph>
             </>
         )}
-        <Git href="https://github.com/igorFrotte">
+        <Git target="_blank" href="https://github.com/igorFrotte/GraphView">
             <img src={git} />
         </Git>
       </Page>
@@ -165,34 +168,77 @@ const Page = styled.div`
     flex-direction: column;
     font-family: 'Raleway';
 
-    div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    input {
+        width: 80px;
+        height: 40px;
+        background: #FFFFFF;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #031634;
+        padding-left: 10px;
+        margin: 10px;
+    }
+
+    button {
+        width: 80px;
+        height: 40px;
+        background: ${props => props.color};
+        border-radius: 5px;
+        font-size: 16px;
+        color: #323131;
+        cursor: pointer;
+        font-weight: 600;
+        margin: 10px;
     }
 `;
 
 const Graph = styled.div`
     display: flex;
     flex-direction: column;
+    font-size: 18px;
 
     & > div {
         display: flex;
+        align-items: center;
+        margin-top: 10px;
     }
 `;
 
 const Pointers = styled.div`
-    border: 3px solid red;
+    display: flex;
+    align-items: center;
 `;
 
 const Node = styled.div`
-    border: 3px solid black;
+    border: 2px solid black;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(91, 119, 141);
+    margin-right: 10px;
 `;
 
 const Edge = styled.div`
-    border: 3px solid blue;
+    display: flex;
+    background-color: rgb(134, 157, 174);
+    margin: 0px 10px;
 
     & > div {
-        border: 3px solid yellow;
+        border: 2px solid black;
+        width: 60px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+`;
+
+const MsgE = styled.div`
+    color: #c33;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0px;
 `;
