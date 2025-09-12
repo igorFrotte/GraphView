@@ -192,7 +192,7 @@ Error generating stack: `+e.message+`
         justify-content: center;
     }
 `,Jv=ne.div`
-    color: #f36969;
+    color: #963232;
     font-size: 20px;
     font-weight: 600;
     margin: 20px 0px;
