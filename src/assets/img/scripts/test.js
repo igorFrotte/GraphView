@@ -14,7 +14,7 @@ function insertList(next, d, c){
 
 function insertEdge(o, d, c){
     if(o > n)
-        printf("\nTamanho máximo é %d\n", n);
+        console.log("Tamanho máximo é " + n);
     else
         grafo[o] = insertList(grafo[o], d, c);
 }
