@@ -60,7 +60,7 @@ export default function Visualizador() {
     function showLine(line){
         let value = <></>;
         while(line != null){
-            value = <>{value} {"  -->  "} <Edge><div>{line.dest}</div><div>{line.cost}</div></Edge></>;
+            value = <>{value}<Edge>{"  -->  "}<div>{line.dest}</div><div>{line.cost}</div></Edge></>;
             line = line.next;
         }   
         return value; 
@@ -154,9 +154,17 @@ const Git = styled.a`
     
     img {
         width: 80px;
-        border-radius: 20px;
+        border-radius: 20%;
     }
 
+    @media (max-width: 480px) {
+        top: 10px;
+        right: 10px;
+
+        img {
+        width: 40px;
+        }
+    }
 `;
 
 const Page = styled.div`
@@ -187,6 +195,18 @@ const Page = styled.div`
         font-weight: 600;
         margin: 10px;
     }
+
+    @media (max-width: 480px) {
+        input {
+            width: 70px;
+            margin: 10px 5px;
+            height: 30px;
+        }
+        button {
+            width: 60px;
+            height: 30px;
+        }
+    }
 `;
 
 const Text = styled.div`
@@ -211,32 +231,38 @@ const Graph = styled.div`
 const Pointers = styled.div`
     display: flex;
     align-items: center;
+    @media (max-width: 480px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const Node = styled.div`
     border: 2px solid black;
-    width: 50px;
-    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgb(91, 119, 141);
-    margin-right: 10px;
+    margin: 0px 10px;
+
 `;
 
 const Edge = styled.div`
     display: flex;
-    background-color: rgb(134, 157, 174);
-    margin: 0px 10px;
+    align-items: center;
+    justify-content: center;
 
     & > div {
         border: 2px solid black;
-        width: 60px;
+        width: 50px;
         height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: rgb(134, 157, 174);
+        margin-top: 5px;
     }
 `;
 
@@ -245,4 +271,5 @@ const MsgE = styled.div`
     font-size: 20px;
     font-weight: 600;
     margin: 20px 0px;
+    text-align: center;
 `;
