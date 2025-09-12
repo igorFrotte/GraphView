@@ -5,7 +5,7 @@ import styled from "styled-components";
 export default function Visualizador() {
     const [graphLength, setGraphLength] = useState("");
     const [graph, setGraph] = useState({});
-    const [errorMsg, setErrorMsg] = useState("error");
+    const [errorMsg, setErrorMsg] = useState("");
     const [origem, setOrigem] = useState("");
     const [destino, setDestino] = useState("");
     const [custo, setCusto] = useState("");
@@ -27,7 +27,7 @@ export default function Visualizador() {
         return;
         }
         if (o > graphLength || d > graphLength) {
-        setErrorMsg(`Origem e destino devem ser menores ou iguais a ${graphLength}.`);
+        setErrorMsg(`Origem e destino devem ser menores ou iguais ao tamanho.`);
         return;
         }
 
@@ -43,8 +43,8 @@ export default function Visualizador() {
     
         const num = parseInt(graphLength, 10);
     
-        if (isNaN(num) || num < 5 || num > 20) {
-          setErrorMsg("Digite um número entre 5 e 20.");
+        if (isNaN(num) || num < 1 || num > 10) {
+          setErrorMsg("Digite um número entre 1 e 10.");
           setGraph({});
         } else {
           const obj = {};
@@ -83,52 +83,50 @@ export default function Visualizador() {
 
     return (
       <Page>
-        {errorMsg && <MsgE>{errorMsg}</MsgE>}
-
+        <Text>Tamanho do Grafo:</Text>
         <form onSubmit={handleForm}>
             <input
             type="number"
-            min="5"
-            max="20"
+            min="1"
+            max="10"
             value={graphLength}
             onChange={(e) => setGraphLength(e.target.value)}
-            placeholder="Digite de 5 a 20"
+            placeholder=""
             />
             <button type="submit"> Enviar </button>
         </form>
 
         {showGraph && (
             <>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-xs">
+                <Text>Informe a Aresta do Grafo:</Text>
+                <form onSubmit={handleSubmit}>
                     <input
                     type="number"
                     placeholder="Origem"
                     value={origem}
                     onChange={(e) => setOrigem(e.target.value)}
-                    className="border px-2 py-1 rounded"
                     />
                     <input
                     type="number"
                     placeholder="Destino"
                     value={destino}
                     onChange={(e) => setDestino(e.target.value)}
-                    className="border px-2 py-1 rounded"
                     />
                     <input
                     type="number"
                     placeholder="Custo"
                     value={custo}
                     onChange={(e) => setCusto(e.target.value)}
-                    className="border px-2 py-1 rounded"
                     />
 
                     <button
                     type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                     Enviar
                     </button>
                 </form>
+
+                {errorMsg && <MsgE>{errorMsg}</MsgE>}
 
                 <Graph>
                     {Object.entries(graph).map(([key, line]) => (
@@ -182,7 +180,6 @@ const Page = styled.div`
     button {
         width: 80px;
         height: 40px;
-        background: ${props => props.color};
         border-radius: 5px;
         font-size: 16px;
         color: #323131;
@@ -190,6 +187,13 @@ const Page = styled.div`
         font-weight: 600;
         margin: 10px;
     }
+`;
+
+const Text = styled.div`
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    color: #000000;
 `;
 
 const Graph = styled.div`
@@ -237,8 +241,8 @@ const Edge = styled.div`
 `;
 
 const MsgE = styled.div`
-    color: #c33;
+    color: #f36969;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
     margin: 20px 0px;
 `;
