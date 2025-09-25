@@ -74,10 +74,10 @@ export default function Visualizador() {
       value = (
         <>
           {value}
-          <Edge style={{ backgroundColor: isActive ? "yellow" : "transparent" }}>
+          <Edge>
             {" --> "}
-            <div>{line.dest}</div>
-            <div>{line.cost}</div>
+            <div style={{ borderColor: isActive ? "yellow" : "black" }}>{line.dest}</div>
+            <div style={{ borderColor: isActive ? "yellow" : "black" }}>{line.cost}</div>
           </Edge>
         </>
       );
@@ -256,7 +256,7 @@ export default function Visualizador() {
             })}
           </Graph>
             
-          <TextDown>Informe os Nós para Gerar Todos os Caminhos:</TextDown>
+          <TextDown>Nós para Gerar Todos os Caminhos:</TextDown>
           <Buttons>
             <input
                 type="number"
@@ -270,7 +270,7 @@ export default function Visualizador() {
                 value={destinoBusca}
                 onChange={(e) => setDestinoBusca(e.target.value)}
             />
-            <button onClick={generateSteps}>Gerar Caminhos</button>
+            <button onClick={generateSteps}>Gerar</button>
             <button
               onClick={nextStep}
               disabled={currentStep >= steps.length - 1}
@@ -383,6 +383,7 @@ const Graph = styled.div`
 const Pointers = styled.div`
   display: flex;
   align-items: center;
+
   @media (max-width: 480px) {
     flex-wrap: wrap;
   }
@@ -429,6 +430,5 @@ const MsgE = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  gap: 10px;
   margin: 10px;
 `;
