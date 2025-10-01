@@ -67,7 +67,7 @@ export default function Visualizador() {
     let value = <></>;
     while (line != null) {
       const isActive =
-        steps[currentStep]?.type === "aresta" &&
+        steps[currentStep]?.type === "Visita Aresta" &&
         steps[currentStep]?.from === parseInt(key) &&
         steps[currentStep]?.to === line.dest;
 
@@ -87,12 +87,11 @@ export default function Visualizador() {
   }
 
   function insertList(next, d, c) {
-    let newL = {
+    return {
       dest: d,
       cost: c,
       next: next,
     };
-    return newL;
   }
 
   function insertEdge(o, d, c) {
@@ -101,49 +100,47 @@ export default function Visualizador() {
     setGraph(newGraph);
   }
 
-  function path(d, p, vet, snapshots) {
+  function path(d, p, vet, snapshots, currentCost = 0) {
     const current = vet[p - 1];
-  
-    // Evento: entrou no nó atual
+
     snapshots.push({
-      type: "visita",
+      type: "Visita Nó",
       node: current,
       path: [...vet.slice(0, p)],
+      cost: currentCost,
     });
-  
+
     if (current === d) {
-      // Encontrou destino
       snapshots.push({
-        type: "encontrou",
+        type: "Encontrou",
         node: current,
         path: [...vet.slice(0, p)],
+        cost: currentCost,
       });
       return;
     }
-  
+
     let l = graph[current];
     while (l != null) {
-      // verifica apenas os elementos do caminho atual (0..p-1)
       if (!vet.slice(0, p).includes(l.dest)) {
-        // Evento: explorando aresta
         snapshots.push({
-          type: "aresta",
+          type: "Visita Aresta",
           from: current,
           to: l.dest,
           path: [...vet.slice(0, p)],
+          cost: currentCost,
         });
-  
+
         vet[p] = l.dest;
-        path(d, p + 1, vet, snapshots);
-  
-        // limpar a posição adicionada para não "vazar" para outros ramos
+        path(d, p + 1, vet, snapshots, currentCost + l.cost);
+
         vet[p] = undefined;
-  
-        // Evento: backtracking (voltou do destino)
+
         snapshots.push({
-          type: "backtrack",
+          type: "Backtrack",
           node: current,
           path: [...vet.slice(0, p)],
+          cost: currentCost,
         });
       }
       l = l.next;
@@ -153,7 +150,7 @@ export default function Visualizador() {
   function generateSteps() {
     const o = parseInt(origemBusca, 10);
     const d = parseInt(destinoBusca, 10);
-  
+
     if (isNaN(o) || isNaN(d)) {
       setErrorMsg("Origem e destino devem ser números.");
       return;
@@ -166,14 +163,13 @@ export default function Visualizador() {
     setErrorMsg("");
     let vet = [o];
     let snapshots = [];
-    path(d, 1, vet, snapshots);
-  
-    // reset final
-    snapshots.push({ type: "final", path: [] });
-  
+    path(d, 1, vet, snapshots, 0);
+
+    snapshots.push({ type: "Final", path: [], cost: 0 });
+
     setSteps(snapshots);
     setCurrentStep(0);
-  }  
+  }
 
   function nextStep() {
     if (currentStep < steps.length - 1) {
@@ -193,9 +189,8 @@ export default function Visualizador() {
           max="10"
           value={graphLength}
           onChange={(e) => setGraphLength(e.target.value)}
-          placeholder=""
         />
-        <button type="submit"> Enviar </button>
+        <button type="submit">Enviar</button>
       </form>
 
       {showGraph && (
@@ -220,7 +215,6 @@ export default function Visualizador() {
               value={custo}
               onChange={(e) => setCusto(e.target.value)}
             />
-
             <button type="submit">Enviar</button>
           </form>
 
@@ -231,21 +225,10 @@ export default function Visualizador() {
               const nodeId = parseInt(key);
               let bg = "rgb(91, 119, 141)";
 
-              if (currentStepData.type === "visita" && currentStepData.node === nodeId) {
-                bg = "blue";
-              } else if (
-                currentStepData.type === "backtrack" &&
-                currentStepData.node === nodeId
-              ) {
-                bg = "red";
-              } else if (
-                currentStepData.type === "encontrou" &&
-                currentStepData.path?.includes(nodeId)
-              ) {
-                bg = "green";
-              } else if (currentStepData.path?.includes(nodeId)) {
-                bg = "orange";
-              }
+              if (currentStepData.type === "Visita Nó" && currentStepData.node === nodeId) bg = "blue";
+              else if (currentStepData.type === "Backtrack" && currentStepData.node === nodeId) bg = "red";
+              else if (currentStepData.type === "Encontrou" && currentStepData.path?.includes(nodeId)) bg = "green";
+              else if (currentStepData.path?.includes(nodeId)) bg = "orange";
 
               return (
                 <div key={key}>
@@ -255,38 +238,50 @@ export default function Visualizador() {
               );
             })}
           </Style.Graph>
-            
+
+          {steps.length > 0 && (
+            <>
+              <Style.Steps bg={currentStepData.type === "Encontrou"? "green": "#444"}>
+                Passo {currentStep + 1} / {steps.length}{" "}
+                {currentStepData.type && `(${currentStepData.type})`}
+              </Style.Steps>
+
+              
+              <Style.VetDisplay>
+                <p>
+                  Caminho Atual: [{currentStepData.path?.filter(n => n !== undefined).join(", ")}]
+                </p>
+                <p>
+                  Custo Total: {currentStepData.cost}
+                </p>
+              </Style.VetDisplay>
+            </>
+          )}
+
           <Style.TextDown>Nós para Gerar Todos os Caminhos:</Style.TextDown>
           <Style.Buttons>
             <input
-                type="number"
-                placeholder="Origem"
-                value={origemBusca}
-                onChange={(e) => setOrigemBusca(e.target.value)}
+              type="number"
+              placeholder="Origem"
+              value={origemBusca}
+              onChange={(e) => setOrigemBusca(e.target.value)}
             />
             <input
-                type="number"
-                placeholder="Destino"
-                value={destinoBusca}
-                onChange={(e) => setDestinoBusca(e.target.value)}
+              type="number"
+              placeholder="Destino"
+              value={destinoBusca}
+              onChange={(e) => setDestinoBusca(e.target.value)}
             />
             <button onClick={generateSteps}>Gerar</button>
-            <button
-              onClick={nextStep}
-              disabled={currentStep >= steps.length - 1}
-            >
+            <button onClick={nextStep} disabled={currentStep >= steps.length - 1}>
               Próximo
             </button>
           </Style.Buttons>
-
-          <p>
-            Passo {currentStep + 1} / {steps.length}{" "}
-            {currentStepData.type && `(${currentStepData.type})`}
-          </p>
         </>
       )}
+
       <Style.Git target="_blank" href="https://github.com/igorFrotte/GraphView">
-        <img src={git} />
+        <img src={git} alt="GitHub" />
       </Style.Git>
     </Style.Page>
   );

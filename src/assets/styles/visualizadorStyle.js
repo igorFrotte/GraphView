@@ -25,7 +25,7 @@ export const Page = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-family: "Raleway";
+  font-family: "Roboto";
 
   input {
     width: 80px;
@@ -139,4 +139,26 @@ export const MsgE = styled.div`
 export const Buttons = styled.div`
   display: flex;
   margin: 10px;
+`;
+
+export const Steps = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  padding: 8px;
+  background-color: ${(props) => props.bg || "#444"};
+  color: white;
+  border-radius: 6px;
+  margin-top: 20px;
+  border: 2px solid black;
+`;
+
+export const VetDisplay = styled.div`
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+
+  & > p {
+    margin: 5px;
+  }
 `;
